@@ -1,0 +1,2 @@
+- Do we need diag_1, 2, 3? What do the numbers correspond to? Are they not already summarised in number of diagnose meds etc?
+- How to stage the code? Like when to remove null values? What to put in a notebook?
