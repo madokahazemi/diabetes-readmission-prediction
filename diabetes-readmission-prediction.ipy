@@ -1,0 +1,93 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import LabelEncoder
+
+#Load dataset
+pd.options.display.max_columns = None
+df = pd.read_csv('/Users/mady/Library/Mobile Documents/com~apple~CloudDocs/DS project/readmission-prediction/data/diabetic_data.csv')
+df.head()
+
+# Display basic information about the dataset
+df.info()
+
+# Display summary statistics of the dataset
+df.describe(include='all')
+
+
+# Find the unique values in each column
+for column in df.columns:
+    print(column)
+    print(df[column].unique())
+    
+# Dropping examide and citoglipton columns as they have only one unique value
+df.drop(['examide', 'citoglipton'], axis=1, inplace=True)    
+
+# Remove ? values from the dataset
+df.replace('?', np.nan, inplace=True)
+
+object_cols = df.select_dtypes(include=['object']).columns
+
+for col in object_cols:
+    unique_values = df[col].unique()
+    print(f"Column: {col}")
+    print(f"Unique Values: {unique_values[:10]}")  # Displaying first 10 unique values for brevity
+    print(f"Number of Unique Values: {len(unique_values)}")
+    print()
+
+# Convert columns to 'category' dtype
+categorical_cols = [
+    'race', 'gender', 'age', 'weight', 'max_glu_serum', 'A1Cresult', 'payer_code', 
+    'medical_specialty', 'readmitted', 'change', 'diabetesMed'
+]
+
+medication_cols = [
+    'metformin', 'repaglinide', 'nateglinide', 'chlorpropamide', 'glimepiride', 
+    'acetohexamide', 'glipizide', 'glyburide', 'tolbutamide', 'pioglitazone', 
+    'rosiglitazone', 'acarbose', 'miglitol', 'troglitazone', 'tolazamide', 
+    'insulin', 'glyburide-metformin', 'glipizide-metformin', 
+    'glimepiride-pioglitazone', 'metformin-rosiglitazone', 'metformin-pioglitazone'
+]
+
+for col in categorical_cols + medication_cols:
+    df[col] = df[col].astype('category')
+    
+    
+# Convert binary columns to numeric
+binary_cols = ['change', 'diabetesMed']
+
+label_encoder = LabelEncoder()
+for col in binary_cols:
+    df[col] = label_encoder.fit_transform(df[col])
+    
+
+df.info()
+df.head()
+
+# Check for missing values
+missing_values = df.isnull().sum()
+print(missing_values[missing_values > 0])
+## How to handle the missing values?
+
+# Display histograms for numeric columns
+numeric_cols = df.select_dtypes(include=['int64', 'category']).columns
+df[numeric_cols].hist(figsize=(20, 20), bins=30, edgecolor='black')
+plt.show()
+
+#display histograms for all columns
+df.hist(figsize=(20, 20), bins=30, edgecolor='black')
+
+#display histograms for categorical columns
+categorical_cols = df.select_dtypes(include=['category']).columns
+df[categorical_cols].hist(figsize=(20, 20), bins=30, edgecolor='black')
+
+#for col in categorical_cols:
+#    plt.figure(figsize=(2, 2))
+#    sns.countplot(x=col, data=df, edgecolor='black')
+#    plt.title(f'Distribution of {col}')
+#    plt.xticks(rotation=45)
+#    plt.show()
+    
+    
+# Remove na values from my dataset
