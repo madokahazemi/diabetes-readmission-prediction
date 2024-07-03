@@ -4,6 +4,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import LabelEncoder
 from scipy.stats import chi2_contingency
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
+
 
 #Load dataset
 pd.options.display.max_columns = None
@@ -143,7 +148,7 @@ df.hist(figsize=(20, 20), bins=30, edgecolor='black')
 
 # Function to plot count plots
 def plot_countplot(ax, df, col, hue):
-    sns.countplot(x=col, hue=hue, data=df, edgecolor='black', ax=ax)
+    sns.countplot(x=col, hue=hue, data=df, edgecolor='black', ax=ax, order=df[col].value_counts().index)
     ax.set_title(f'{hue} by {col}')
     ax.tick_params(axis='x', rotation=45)
     
@@ -218,6 +223,125 @@ numerical_cols = ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'n
 sns.pairplot(df[numerical_cols + ['readmitted']], hue='readmitted')
 plt.show()
 
+# Heatmap for each categorical variable
+new_categorical_cols = ['race', 'gender', 'age', 'admission_type_id', 'discharge_disposition_id', 'admission_source_id', 'change', 'diabetesMed', 'diag_1_category', 'diag_2_category', 'diag_3_category']
+
+for i, col1 in enumerate(new_categorical_cols):
+    for col2 in new_categorical_cols[i+1:]:
+        plt.figure(figsize=(12, 8))
+        contingency_table = pd.crosstab(df[col1], df[col2])
+        sns.heatmap(contingency_table, annot=True, fmt="d", cmap="YlGnBu")
+        plt.title(f'Frequency of {col1} and {col2}')
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=0)
+        plt.show()
+        
+display_plots_side_by_side(df, new_categorical_cols, plot_countplot)
+        
+from statsmodels.graphics.mosaicplot import mosaic
+
+for i, col1 in enumerate(new_categorical_cols):
+    for col2 in new_categorical_cols[i+1:]:
+        plt.figure(figsize=(12, 8))
+        mosaic(df, [col1, col2], title=f'Mosaic plot of {col1} and {col2}')
+        plt.xticks(rotation=45)
+        plt.show()
+        
+# Heatmap for numerical variables
+# Create Correlation Matrix
+# Make readimitted a numerical variable
+df['num_readmitted'] = df['readmitted'].map({'<30': 1, '>30': 1, 'NO': 0})
+plt.figure(figsize=(12, 8))
+corr_matrix = df[['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications', 'number_outpatient', 'number_emergency', 'number_inpatient', 'num_readmitted', 'diabetesMed', 'change']].corr()
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', fmt='.2f')
+plt.title('Correlation Matrix for Numerical Variables')
+plt.show()
+
+
+def chi_square_test(df, col1, col2):
+    contingency_table = pd.crosstab(df[col1], df[col2])
+    chi2, p, dof, expected = chi2_contingency(contingency_table)
+    return chi2, p
+
+# Perform Chi-Square Test for each categorical variable against 'readmitted'
+results = []
+for col in new_categorical_cols:
+    chi2, p = chi_square_test(df, col, 'readmitted')
+    results.append((col, chi2, p))
+
+# Convert results to a DataFrame for better visualization
+results_df = pd.DataFrame(results, columns=['Variable', 'Chi-Square', 'p-value'])
+significance_level = 0.05
+results_df['Significant'] = results_df['p-value'] < significance_level
+print(results_df)
+
+
+
+
+
+
+
+##Building a model
+
+numeric_cols = ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications', 'number_outpatient', 'number_emergency', 'number_inpatient']
+categorical_cols = ['race', 'gender', 'age', 'admission_type_id', 'discharge_disposition_id', 'admission_source_id', 'diag_1_category', 'diag_2_category', 'diag_3_category', 'diabetesMed', 'change']
+
+# Impute missing values for numeric columns
+for col in numeric_cols:
+    df[col] = df[col].astype(float)
+    median_value = df[col].median()
+    df[col] = df[col].fillna(median_value)
+
+
+# Impute missing values for categorical columns
+for col in categorical_cols:
+    df[col] = df[col].astype(str)
+    mode_value = df[col].mode()[0]
+    df[col].fillna(mode_value)
+
+# Encoding categorical variables
+for col in categorical_cols:
+    df[col] = LabelEncoder().fit_transform(df[col])
+
+# Selecting features and target variable
+features = numeric_cols + categorical_cols
+target = 'readmitted'
+
+X = df[features]
+y = df[target]
+
+# Splitting data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Standardizing numerical features
+scaler = StandardScaler()
+X_train[numeric_cols] = scaler.fit_transform(X_train[numeric_cols])
+X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
+
+# Building and training the initial model
+model = LogisticRegression(max_iter=1000, random_state=42)
+model.fit(X_train, y_train)
+
+# Evaluating the model
+y_pred = model.predict(X_test)
+y_pred_proba = model.predict_proba(X_test)
+
+# Ensure y_pred_proba is a 2D array
+if y_pred_proba.ndim == 1 or y_pred_proba.shape[1] == 1:
+    raise ValueError("The predicted probabilities array y_pred_proba must be a 2D array with probability scores for each class.")
+
+
+# Calculate ROC-AUC Score for multi-class classification
+roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nClassification Report:")
+print(classification_report(y_test, y_pred))
+print("\nROC-AUC Score:")
+print(roc_auc_score(y_test, y_pred_proba, multi_class='ovr'))
+
+#Model simplif
 
 
 
@@ -228,9 +352,7 @@ plt.show()
 
 
 
-
-
-
+p
 
 
 
@@ -281,3 +403,6 @@ if p < alpha:
     print("There is a significant relationship between diagnosis category and readmission.")
 else:
     print("There is no significant relationship between diagnosis category and readmission.")
+    
+    
+print(f"Shape of y_pred_proba: {y_pred_proba.shape}")
