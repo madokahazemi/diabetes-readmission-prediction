@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "readmission-prediction"
+version = "0.1.0"
+description = ""
+authors = ["Madoka Hazemi <madokahazemi@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+skimpy = "^0.0.15"
+ipykernel = "^6.29.5"
+pandas = "^2.2.2"
+matplotlib = "^3.9.1"
+numpy = ">=1.22.2,<2.0.0"
+seaborn = "^0.13.2"
+scikit-learn = "^1.5.1"
+xgboost = "^2.1.0"
+catboost = "^1.2.5"
+imblearn = "^0.0"
+lightgbm = "^4.4.0"
+category-encoders = "^2.6.3"
+yellowbrick = "^1.5"
+setuptools = "^73.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

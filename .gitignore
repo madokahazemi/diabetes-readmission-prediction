@@ -1,3 +1,5 @@
+git rm -r --cached --ignore-unmatch data/IDS_mapping.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
