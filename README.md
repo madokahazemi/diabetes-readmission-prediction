@@ -128,33 +128,28 @@ To explore the notebook file [here](https://github.com/madokahazemi/diabetes-rea
 ```
 
 ├── assets
-│   ├── confusion_matrix.png                      <- confusion matrix image used in the README.
-│   ├── heatmap.png                               <- heatmap image used in the README.
-│   ├── banner.png                                <- banner image used in the README.
-│   ├── roc.png                                   <- ROC image used in the README.
+│   ├── Banner.png                                 <- banner image used in the README.
+│   ├── EDA_heatmap.png                            <- heatmap image used in the README.
+│   ├── LightGBM_evaluation.png                    <- model evaluation image used in the README.
+│   ├── LightGBM_FeatureImportance.png             <- feature importance image used in the README.
 │
 ├── data
-│   ├── diabetes_data.csv                    <- the dataset with patient information.
-│
-
-├── pandas_profile_file
-│   ├── credit_pred_profile.html                  <- exported panda profile html file.
-│
-│
-├── .gitignore                                    <- used to ignore certain folder and files that won't be commit to git.
+│   ├── diabetes_data.csv                           <- the dataset with patient information.
 │
 │├── code
 │   ├── Prediction on Hosputal Readmission.ipynb         <- main python notebook where all the analysis and modeling are done.
 │
 │
-│
-├── README.md                                     <- this readme file.
-│
-├── requirements.txt                              <- list of all the dependencies with their versions.
+│├── .gitignore                                    <- used to ignore certain folder and files that won't be commit to git.
 │
 ├── poetry.lock                             <- detailed, pinned dependency specifications for Poetry.
 │
 ├── pyproject.toml                             <- configuration file for Poetry, defining project metadata and dependencies.
+│
+├── README.md                                     <- this readme file.
+│
+├── requirements.txt                              <- list of all the dependencies with their versions.
+
 
 ```
 
