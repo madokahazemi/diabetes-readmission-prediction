@@ -134,21 +134,21 @@ To explore the notebook file [here](https://github.com/madokahazemi/diabetes-rea
 │   ├── LightGBM_FeatureImportance.png             <- feature importance image used in the README.
 │
 ├── data
-│   ├── diabetes_data.csv                           <- the dataset with patient information.
+│   ├── diabetes_data.csv                          <- the dataset with patient information.
 │
 │├── code
-│   ├── Prediction on Hosputal Readmission.ipynb         <- main python notebook where all the analysis and modeling are done.
+│   ├── Prediction on Hosputal Readmission.ipynb   <- main python notebook where all the analysis and modeling are done.
 │
 │
 │├── .gitignore                                    <- used to ignore certain folder and files that won't be commit to git.
 │
-├── poetry.lock                             <- detailed, pinned dependency specifications for Poetry.
+├── poetry.lock                                    <- detailed, pinned dependency specifications for Poetry.
 │
-├── pyproject.toml                             <- configuration file for Poetry, defining project metadata and dependencies.
+├── pyproject.toml                                 <- configuration file for Poetry, defining project metadata and dependencies.
 │
-├── README.md                                     <- this readme file.
+├── README.md                                      <- this readme file.
 │
-├── requirements.txt                              <- list of all the dependencies with their versions.
+├── requirements.txt                               <- list of all the dependencies with their versions.
 
 
 ```
