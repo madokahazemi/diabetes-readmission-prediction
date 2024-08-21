@@ -85,8 +85,9 @@ Average Precision provides a comprehensive evaluation of the model's performance
 
 
   - ***Note***: There is always a trade-off between precision and recall. Choosing the right balance depends on the specific healthcare context, available resources, and the relative costs of false positives versus false negatives.
-    - In a well-resourced healthcare setting, hospitals have ample capacity and resources to handle patient care. The cost of a false positive (incorrectly predicting a readmission) is relatively low compared to the cost of a missed readmission. In this scenario, the hospital can afford to intervene with more patients, even if some of those interventions are unnecessary. Having a good recall (sensitivity) is ideal here, as it ensures that most patients at risk of readmission are identified and receive additional care or follow-up.
-    - In a resource-constrained healthcare setting, hospitals have limited capacity and must allocate their resources very carefully. The cost of unnecessary interventions (false positives) becomes more significant. In this case, the hospital needs to be more selective in identifying high-risk patients to ensure that limited resources are used most effectively. Having good precision (specificity) becomes more desirable, as it helps ensure that interventions are targeted at patients who are most likely to be readmitted.
+    - In a well-resourced healthcare setting, having a good recall (sensitivity) is ideal, as it ensures that most patients at risk of readmission are identified and receive additional care.
+    - In a resource-constrained healthcare setting, In this case, the hospital needs to be more selective in identifying high-risk patients to ensure that limited resources are used most effectively. Having good precision (specificity) becomes more desirable, as it helps ensure that interventions are targeted at patients who are most likely to be readmitted.
+
 
 ***Conclusion***: Since our primary goal is to minimize the risk of patient readmission and assuming we have adequate resources for follow-up care, we prioritize recall while using Average Precision as our overall metric to balance both precision and recall across different thresholds.
 
@@ -95,23 +96,24 @@ Average Precision provides a comprehensive evaluation of the model's performance
 
 - Based on this project's analysis, the number of inpatient visits, number of diagnoses, and time in hospital are the three most predictive features in determining whether a patient is likely to be readmitted within 30 days. Other features like age and number of medications are also helpful. The least useful features appear to be gender and some specific diagnosis categories.
 
-- The recommendation would be to focus more on the most predictive features when assessing a patient's risk of readmission. Specifically:
+- Recommendations:
+  - Focus on patients with frequent inpatient visits and complex diagnoses.
+  - Consider longer hospital stays as potential indicators of higher readmission risk.
+  - Factor in patient age and number of prescribed medications when assessing risk.
+  - Pay less attention to factors like gender and specific diagnosis categories, which showed less predictive power.
 
-  - Pay close attention to patients with a history of frequent inpatient visits, as they are at higher risk of readmission.
-  - Consider the complexity of a patient's condition, as indicated by the number of diagnoses, when planning post-discharge care.
-  - Evaluate the length of hospital stay carefully, as longer stays may indicate more complex cases with higher readmission risk.
-  - Take into account the patient's age and the number of medications they're prescribed, as these factors also contribute to readmission risk.
 
 
 ## Limitation and what can be improved
 
 While the model's performance (with an Average Precision of about 15.7% for the best model) indicates the challenging nature of predicting readmissions, it still provides valuable insights for identifying high-risk patients.
 
-- The use of ensemble methods, particularly gradient boosting (LightGBM), proved most effective for this complex problem. This suggests that leveraging multiple weak learners can capture the nuanced patterns in readmission risk better than simpler models.
-
-- The challenge of class imbalance in the dataset highlights the importance of using appropriate evaluation metrics (like Average Precision) and sampling techniques when dealing with healthcare data.
-
-- For future work, consider incorporating more detailed data on post-discharge care plans, patient compliance with treatment, and social determinants of health to potentially improve prediction accuracy.
+For future work:
+  - Retrain the model without the least predictive features and apply more advanced feature selection methods, such as recursive feature elimination or LASSO regularization to potentially improve performance and reduce noise.
+  - Experiment with more advanced feature engineering techniques, such as polynomial features or interaction terms.
+  - Explore deep learning models, particularly recurrent neural networks (RNNs) or transformers, to capture temporal patterns in patient history.
+  - Implement more sophisticated ensemble methods, such as stacking or blending multiple models.
+  - Try advanced sampling techniques to better handle class imbalance.
 
 
 
