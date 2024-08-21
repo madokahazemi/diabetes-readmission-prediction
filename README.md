@@ -1,24 +1,8 @@
-# Business Value/Problem
-# Results Summary
-# EDA
-# Methods and Findings
-
 ![banner](assets/Banner.png)
 
 
-![Python version](https://img.shields.io/badge/Python%20version-3.12%2B-lightgrey)
-![GitHub last commit](https://img.shields.io/github/last-commit/madokahazemi/readmission-prediction)
-![GitHub repo size](https://img.shields.io/github/repo-size/madokahazemi/readmission-prediction)
-![Type of ML](https://img.shields.io/badge/Type%20of%20ML-Binary%20Classification-red)
-![License](https://img.shields.io/badge/License-MIT-green)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1CfV6yEsHBjFiJbTKwY72k2g4AvszcF5R)
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/madokahazemi/readmission-prediction/main/app.py)
-[![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
-
-Badge [source](https://shields.io/)
-
-
 # Key findings:
+ # Key findings: Predicting hospital readmissions within 30 days is challenging, with the best model (LightGBM) achieving an Average Precision of 15.7%, but the analysis reveals that the number of previous inpatient visits, number of diagnoses, and length of hospital stay are the strongest predictors of readmission risk.
 
 ## Authors
 
@@ -39,7 +23,7 @@ Badge [source](https://shields.io/)
 
 ## Business problem
 
-
+Hospital readmissions within 30 days of discharge are a significant challenge in healthcare, leading to increased costs and potentially indicating gaps in care quality. This project aims to develop a predictive model to identify patients at high risk of readmission, enabling healthcare providers to implement targeted interventions and improve patient outcomes while optimizing resource allocation.
 
 
 ## Data source
@@ -58,11 +42,11 @@ Badge [source](https://shields.io/)
   - ADASYN
   - SMOTETomek
 - Model deployment:
-  1. Logistic Regression
-  2. Random Forest
-  3. XGBoost
-  4. LightGBM
-  5. CatBoost
+  - Logistic Regression
+  - Random Forest
+  - XGBoost
+  - LightGBM
+  - CatBoost
 
 
 ## Tech Stack
@@ -74,7 +58,8 @@ Badge [source](https://shields.io/)
 
 Correlation between the features.
 
-![heatmap](assets/EDA_heatmap.png)
+![heatmap](assets/EDA_Heatmap.png)
+
 
 Top 3 models (with hypertuned parameters)
 
@@ -99,11 +84,9 @@ Feature importance:
 Average Precision provides a comprehensive evaluation of the model's performance across all possible classification thresholds. It summarizes the precision-recall curve into a single score, effectively capturing the model's ability to identify true positives (correct readmission predictions) while considering the precision-recall trade-off. This makes Average Precision particularly suitable for our readmission prediction task, where we need to balance the identification of high-risk patients with the efficient use of healthcare resources.
 
 
-***Note***: There is always a trade-off between precision and recall. Choosing the right balance depends on the specific healthcare context, available resources, and the relative costs of false positives versus false negatives.
-
-- In a well-resourced healthcare setting, hospitals have ample capacity and resources to handle patient care. The cost of a false positive (incorrectly predicting a readmission) is relatively low compared to the cost of a missed readmission. In this scenario, the hospital can afford to intervene with more patients, even if some of those interventions are unnecessary. Having a good recall (sensitivity) is ideal here, as it ensures that most patients at risk of readmission are identified and receive additional care or follow-up.
-
-- In a resource-constrained healthcare setting, hospitals have limited capacity and must allocate their resources very carefully. The cost of unnecessary interventions (false positives) becomes more significant. In this case, the hospital needs to be more selective in identifying high-risk patients to ensure that limited resources are used most effectively. Having good precision (specificity) becomes more desirable, as it helps ensure that interventions are targeted at patients who are most likely to be readmitted.
+  - ***Note***: There is always a trade-off between precision and recall. Choosing the right balance depends on the specific healthcare context, available resources, and the relative costs of false positives versus false negatives.
+    - In a well-resourced healthcare setting, hospitals have ample capacity and resources to handle patient care. The cost of a false positive (incorrectly predicting a readmission) is relatively low compared to the cost of a missed readmission. In this scenario, the hospital can afford to intervene with more patients, even if some of those interventions are unnecessary. Having a good recall (sensitivity) is ideal here, as it ensures that most patients at risk of readmission are identified and receive additional care or follow-up.
+    - In a resource-constrained healthcare setting, hospitals have limited capacity and must allocate their resources very carefully. The cost of unnecessary interventions (false positives) becomes more significant. In this case, the hospital needs to be more selective in identifying high-risk patients to ensure that limited resources are used most effectively. Having good precision (specificity) becomes more desirable, as it helps ensure that interventions are targeted at patients who are most likely to be readmitted.
 
 ***Conclusion***: Since our primary goal is to minimize the risk of patient readmission and assuming we have adequate resources for follow-up care, we prioritize recall while using Average Precision as our overall metric to balance both precision and recall across different thresholds.
 
