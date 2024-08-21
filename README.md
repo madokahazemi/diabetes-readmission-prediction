@@ -97,10 +97,10 @@ Average Precision provides a comprehensive evaluation of the model's performance
 
 - The recommendation would be to focus more on the most predictive features when assessing a patient's risk of readmission. Specifically:
 
-  1. Pay close attention to patients with a history of frequent inpatient visits, as they are at higher risk of readmission.
-  2. Consider the complexity of a patient's condition, as indicated by the number of diagnoses, when planning post-discharge care.
-  3. Evaluate the length of hospital stay carefully, as longer stays may indicate more complex cases with higher readmission risk.
-  4. Take into account the patient's age and the number of medications they're prescribed, as these factors also contribute to readmission risk.
+  - Pay close attention to patients with a history of frequent inpatient visits, as they are at higher risk of readmission.
+  - Consider the complexity of a patient's condition, as indicated by the number of diagnoses, when planning post-discharge care.
+  - Evaluate the length of hospital stay carefully, as longer stays may indicate more complex cases with higher readmission risk.
+  - Take into account the patient's age and the number of medications they're prescribed, as these factors also contribute to readmission risk.
 
 
 ## Limitation and what can be improved
@@ -150,8 +150,11 @@ To explore the notebook file [here](https://github.com/madokahazemi/diabetes-rea
 │
 ├── README.md                                     <- this readme file.
 │
-│
 ├── requirements.txt                              <- list of all the dependencies with their versions.
+│
+├── poetry.lock                             <- detailed, pinned dependency specifications for Poetry.
+│
+├── pyproject.toml                             <- configuration file for Poetry, defining project metadata and dependencies.
 
 ```
 
