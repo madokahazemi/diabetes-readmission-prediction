@@ -253,14 +253,6 @@ for i, col1 in enumerate(new_categorical_cols):
         
 display_plots_side_by_side(df, new_categorical_cols, plot_countplot)
         
-from statsmodels.graphics.mosaicplot import mosaic
-
-for i, col1 in enumerate(new_categorical_cols):
-    for col2 in new_categorical_cols[i+1:]:
-        plt.figure(figsize=(12, 8))
-        mosaic(df, [col1, col2], title=f'Mosaic plot of {col1} and {col2}')
-        plt.xticks(rotation=45)
-        plt.show()
         
 # Heatmap for numerical variables
 # Create Correlation Matrix
@@ -432,162 +424,94 @@ selected_features
 
 
 
+### Create ROC-AUC curve manually
 
-
-
-
-
-
-
-
-
-
-
-# Outcome vs. Medication
-
-#for col in medication_cols:
-#    plt.figure(figsize=(10, 6))
-#    sns.countplot(x=col, hue=outcome_col, data=df, edgecolor='black')
-#    plt.title(f'{outcome_col} by {col}')
-#    plt.xticks(rotation=45)
-#    plt.show()
-
-# Interactions Between Key Features
-#interaction_cols = ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications']
-#sns.pairplot(df[interaction_cols])
-#plt.show()
-
-# Create a contingency table for primary diagnosis and readmission
-contingency_table = pd.crosstab(df['diag_1_category'], df['readmitted'])
-
-# Perform chi-square test
-chi2, p, dof, expected = chi2_contingency(contingency_table)
-
-print(f"Chi-square statistic: {chi2}")
-print(f"p-value: {p}")
-
-# Determine significance
-alpha = 0.05
-if p < alpha:
-    print("There is a significant relationship between diagnosis category and readmission.")
-else:
-    print("There is no significant relationship between diagnosis category and readmission.")
-    
-    
-print(f"Shape of y_pred_proba: {y_pred_proba.shape}")
-
-# Function to train and evaluate models
-def evaluate_models(models, X_train, y_train, X_test, y_test):
-    results = {}
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        y_pred_proba = model.predict_proba(X_test)[:, 1] if hasattr(model, "predict_proba") else None
-        results[name] = {
-            'Accuracy': accuracy_score(y_test, y_pred),
-            'Precision': precision_score(y_test, y_pred, average='weighted', zero_division=0),
-            'Recall': recall_score(y_test, y_pred, average='weighted'),
-            'F1 Score': f1_score(y_test, y_pred, average='weighted'),
-            'ROC-AUC': roc_auc_score(y_test, y_pred_proba, multi_class='ovr') if y_pred_proba is not None else None
-        }
-    return results
-
-def evaluate_models(models, X_train, y_train, X_test, y_test):
-    results = {}
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        if hasattr(model, "predict_proba"):
-            y_pred_proba = model.predict_proba(X_test)
-            print(f"Model: {name}, y_pred_proba shape: {y_pred_proba.shape}, y_pred_proba type: {type(y_pred_proba)}")
-            if y_pred_proba.ndim > 1 and y_pred_proba.shape[1] > 1:
-                y_pred_proba = y_pred_proba[:, 1]
-            roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
-        else:
-            roc_auc = None
-        results[name] = {
-            'Accuracy': accuracy_score(y_test, y_pred),
-            'Precision': precision_score(y_test, y_pred, average='weighted', zero_division=0),
-            'Recall': recall_score(y_test, y_pred, average='weighted'),
-            'F1 Score': f1_score(y_test, y_pred, average='weighted'),
-            'ROC-AUC': roc_auc
-        }
-    return results
-
-# Evaluate the models
-results = evaluate_models(models, X_train, y_train, X_test, y_test)
-
-# Display the results
-for model_name, metrics in results.items():
-    print(f"Model: {model_name}")
-    print(f"Accuracy: {metrics['Accuracy']:.4f}")
-    print(f"Precision: {metrics['Precision']:.4f}")
-    print(f"Recall: {metrics['Recall']:.4f}")
-    print(f"F1 Score: {metrics['F1 Score']:.4f}")
-    if metrics['ROC-AUC'] is not None:
-        print(f"ROC-AUC: {metrics['ROC-AUC']:.4f}")
-    print('-'*40)
-
-
-##Building a model
-
-numeric_cols = ['time_in_hospital', 'num_lab_procedures', 'num_procedures', 'num_medications', 'number_outpatient', 'number_emergency', 'number_inpatient']
-categorical_cols = ['race', 'gender', 'age', 'admission_type_id', 'discharge_disposition_id', 'admission_source_id', 'diag_1_category', 'diag_2_category', 'diag_3_category', 'diabetesMed', 'change']
-
-# Impute missing values for numeric columns
-for col in numeric_cols:
-    df[col] = df[col].astype(float)
-    median_value = df[col].median()
-    df[col] = df[col].fillna(median_value)
-
-
-# Impute missing values for categorical columns
-for col in categorical_cols:
-    df[col] = df[col].astype(str)
-    mode_value = df[col].mode()[0]
-    df[col].fillna(mode_value)
-
-# Encoding categorical variables
-for col in categorical_cols:
-    df[col] = LabelEncoder().fit_transform(df[col])
-
-# Selecting features and target variable
-features = numeric_cols + categorical_cols
-target = 'readmitted'
-
-X = df[features]
-y = df[target]
-
-# Splitting data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-# Standardizing numerical features
-scaler = StandardScaler()
-X_train[numeric_cols] = scaler.fit_transform(X_train[numeric_cols])
-X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
-
-# Building and training the initial model
-model = LogisticRegression(max_iter=1000, random_state=42)
+# Create model random forest
+X_train, y_train, X_test, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestClassifier()
 model.fit(X_train, y_train)
-
-# Evaluating the model
-y_pred = model.predict(X_test)
-y_pred_proba = model.predict_proba(X_test)
-
-# Ensure y_pred_proba is a 2D array
-if y_pred_proba.ndim == 1 or y_pred_proba.shape[1] == 1:
-    raise ValueError("The predicted probabilities array y_pred_proba must be a 2D array with probability scores for each class.")
+y_pred_proba = model.predict_proba(X_test)[:, 1]
+y_pred_proba
 
 
-# Calculate ROC-AUC Score for multi-class classification
-roc_auc = roc_auc_score(y_test, y_pred_proba, multi_class='ovr')
+# First I need to calculate TPR and FPR
 
-print("Confusion Matrix:")
-print(confusion_matrix(y_test, y_pred))
-print("\nClassification Report:")
-print(classification_report(y_test, y_pred))
-print("\nROC-AUC Score:")
-print(roc_auc_score(y_test, y_pred_proba, multi_class='ovr'))
+def calculate_tpr_fpr(y_true, y_pred_proba, threshold):
+    y_pred = np.where(y_pred_proba >= threshold, 1, 0)
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true == 0) & (y_pred == 1))
+    tn = np.sum((y_true == 0) & (y_pred == 0))
+    fn = np.sum((y_true == 1) & (y_pred == 0))
+    tpr = tp / (tp + fn)
+    fpr = fp / (fp + tn)
+    return tpr, fpr
+
+def manual_roc_curve(y_true, y_pred_proba):
+    thresholds = np.linspace(1, 0, 100)
+    tpr_list = [0]
+    fpr_list = [0]
+    for threshold in thresholds:
+        tpr, fpr = calculate_tpr_fpr(y_true, y_pred_proba, threshold)
+        tpr_list.append(tpr)
+        fpr_list.append(fpr)
+    tpr_list.append(1)
+    fpr_list.append(1)
+    return np.array(fpr_list), np.array(tpr_list)
 
 
+fpr, tpr = manual_roc_curve(y_test, y_pred_proba)
+fpr, tpr
+    
+def calculate_auc(fpr, tpr):
+    return np.trapz(tpr, fpr)
 
+calculate_auc(fpr, tpr)
+
+plt.plot(fpr, tpr, label=f'AUC: {calculate_auc(tpr, fpr):.2f}')
+plt.plot([0, 1], [0, 1], color='black', linestyle='--')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('ROC Curve')
+plt.legend()
+plt.show()
+
+
+## Manually create PR-curve
+# Calculate Recall and precision
+def calculate_recall_precision(y_true, y_pred_proba, threshold):
+    y_pred = np.where(y_pred_proba >= threshold, 1, 0)
+    tp = np.sum((y_true == 1) & (y_pred == 1))
+    fp = np.sum((y_true == 0) & (y_pred == 1))
+    tn = np.sum((y_true == 0) & (y_pred == 0))
+    fn = np.sum((y_true == 1) & (y_pred == 0))
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    return recall, precision
+
+#  Create results array from each threshold for recall and precision
+def manual_pr_curve(y_true, y_pred_proba):
+    thresholds = np.linspace(1, 0, 100)
+    recall_list = [0]
+    precision_list = [0]
+    for threshold in thresholds:
+        recall, precision = calculate_recall_precision(y_true, y_pred_proba, threshold)
+        recall_list.append(recall)
+        precision_list.append(precision)
+    return np.array(recall_list), np.array(precision_list)
+
+recall, precision = manual_pr_curve(y_test, y_pred_proba)
+recall, precision
+
+# Calculate PR AUC
+def calculate_pr_auc(recall, precision):
+    return np.trapz(precision, recall)
+
+calculate_pr_auc(recall, precision)
+
+plt.plot(recall, precision, label=f'PR-AUC: {calculate_pr_auc(recall, precision):.2f}')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.title('PR Curve')
+plt.legend()
+plt.show()
+        
