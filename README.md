@@ -67,6 +67,8 @@ Key features include:
  - Number of medication changes (Derived from 23 medication features representing changes in different medications during a patient's hospital stay. This is based on research linking medication changes to diabetic readmission rates.)
 
 
+Correlation between numerical features:
+
 ![heatmap](assets/EDA_Heatmap.png)
 
 
