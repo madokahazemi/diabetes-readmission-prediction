@@ -33,6 +33,7 @@ Hospital readmissions within 30 days of discharge are a significant challenge in
 - Exploratory data analysis
 - Bivariate analysis
 - Multivariate correlation
+- Cross-validation
 - Sampling:
   - SMOTE
   - Random Undersampling
@@ -114,7 +115,7 @@ While the model's performance (with an Average Precision of about 15.7% for the 
 
 ## Limitation and future work
 
-Despite multiple attempts to improve model performance (including addressing class imbalance with threshold adjustments, oversampling, undersampling, and combinations of these techniques), we were unable to achieve a satisfactory PR-AUC curve. This persistent challenge likely stems from several factors:
+Despite multiple attempts to improve model performance (including CV, addressing class imbalance with threshold adjustments, oversampling, undersampling, and combinations of these techniques), we were unable to achieve a satisfactory PR-AUC curve. This persistent challenge likely stems from several factors:
 
   - Complex nature of readmissions: Hospital readmissions are influenced by a wide range of factors, many of which may not be fully captured by our current dataset or available features, limiting the predictive power of our model.
   - Temporal aspects: Our current approach may not adequately capture the time-dependent nature of patient health trajectories.
