@@ -9,7 +9,7 @@
 
 ## Table of Contents
 
-  - [Business problem](#business_problem)
+  - [Business problem](#Business-problem)
   - [Data source](#data-source)
   - [Methods](#methods)
   - [Tech Stack](#tech-stack)
