@@ -9,7 +9,7 @@
 
 ## Table of Contents
 
-  - [Business problem](#businessproblem)
+  - [Business problem](#business problem)
   - [Data source](#data-source)
   - [Methods](#methods)
   - [Tech Stack](#tech-stack)
@@ -19,7 +19,7 @@
   - [Explore the notebook](#explore-the-notebook)
   - [Repository structure](#repository-structure)
 
-## Businessproblem
+## Business problem
 
 Hospital readmissions within 30 days of discharge are a significant challenge in healthcare, leading to increased costs and potentially indicating gaps in care quality. This project aims to develop a predictive model to identify patients at high risk of readmission, enabling healthcare providers to implement targeted interventions and improve patient outcomes while optimizing resource allocation.
 
