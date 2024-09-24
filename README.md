@@ -135,7 +135,9 @@ Future work:
 
 To explore the notebook file [here](https://github.com/madokahazemi/diabetes-readmission-prediction/blob/main/code/Prediction%20on%20Hospital%20Readmission.ipynb)
 
+## Deployment on Streamlit
 
+To explore the Streamlit app [here](https://madokahazemi-diabetes-codehospital-readmission-streamlit-ex50en.streamlit.app/streamlit.py)
 
 
 ## Repository structure
