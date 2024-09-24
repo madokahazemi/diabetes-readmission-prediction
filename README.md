@@ -137,7 +137,7 @@ To explore the notebook file [here](https://github.com/madokahazemi/diabetes-rea
 
 ## Deployment on Streamlit
 
-To explore the Streamlit app [here](https://madokahazemi-diabetes-codehospital-readmission-streamlit-ex50en.streamlit.app/streamlit.py)
+To explore the Streamlit app [here](https://madokahazemi-diabetes-codehospital-readmission-streamlit-ex50en.streamlit.app)
 
 
 ## Repository structure
