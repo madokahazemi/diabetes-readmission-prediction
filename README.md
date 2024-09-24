@@ -10,14 +10,14 @@
 ## Table of Contents
 
   - [Business problem](#Business-problem)
-  - [Data source](#data-source)
-  - [Methods](#methods)
-  - [Tech Stack](#tech-stack)
+  - [Data source](#Data-source)
+  - [Methods](#Methods)
+  - [Tech Stack](#Tech-Stack)
   - [EDA](#EDA)
-  - [Lessons learned and recommendation](#lessons-learned-and-recommendation)
-  - [Limitation and future work](#limitation-and-future-work)
-  - [Explore the notebook](#explore-the-notebook)
-  - [Repository structure](#repository-structure)
+  - [Lessons learned and recommendation](#Lessons-learned-and-recommendation)
+  - [Limitation and future work](#Limitation-and-future-work)
+  - [Explore the notebook](#Explore-the-notebook)
+  - [Repository structure](#Repository-structure)
 
 ## Business problem
 
