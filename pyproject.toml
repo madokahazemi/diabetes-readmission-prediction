@@ -21,6 +21,8 @@ lightgbm = "^4.4.0"
 category-encoders = "^2.6.3"
 yellowbrick = "^1.5"
 setuptools = "^73.0.1"
+streamlit = "^1.38.0"
+shap = "^0.46.0"
 
 
 [build-system]
